@@ -7,15 +7,14 @@ import * as Yup from "yup";
 
 // Validation schema using Yup
 const validationSchema = Yup.object({
-  title: Yup.string().required("Title is required").min(3, "Title must be at least 3 characters"),
-  description: Yup.string().required("Description is required").min(5, "Description must be at least 5 characters"),
-  status: Yup.string().required("Status is required"),
+  title: Yup.string().required("Title is required"),
+  description: Yup.string().optional(),
 });
 
 function EditTaskModal({ isOpen, onClose, task, onEdit }: EditTaskModalProps) {
   // useFormik hook
   const formik = useFormik({
-    initialValues: task || { title: "", description: "", status: "" },
+    initialValues: task || { title: "", description: "" },
     validationSchema,
     onSubmit: (values: TaskType) => {
       const updatedTask = { ...values, id: task.id };
@@ -36,7 +35,7 @@ function EditTaskModal({ isOpen, onClose, task, onEdit }: EditTaskModalProps) {
       onClose={handleClose} // Use handleClose to reset form and close the modal
       className="fixed inset-0 z-50 flex items-center justify-center bg-opacity-30 backdrop-blur-sm"
     >
-      <div className="bg-white rounded-xl p-6 w-full max-w-md shadow-xl">
+      <div className="bg-white rounded-xl p-6 w-full max-w-md shadow-xl" data-cy="edit-task-modal">
         <Dialog.Title className="text-xl font-bold mb-4">
           Edit Task
         </Dialog.Title>
@@ -50,6 +49,7 @@ function EditTaskModal({ isOpen, onClose, task, onEdit }: EditTaskModalProps) {
               type="text"
               id="title"
               name="title"
+              data-cy="edit-task-title-input"
               className="w-full border rounded p-2"
               placeholder="Task title"
               onChange={formik.handleChange}
@@ -109,6 +109,8 @@ function EditTaskModal({ isOpen, onClose, task, onEdit }: EditTaskModalProps) {
             <button
               type="submit"
               disabled={!formik.isValid || !formik.dirty}
+              aria-label="submit-edit-task-button"
+              data-cy="submit-edit-task-button"
               className="px-4 py-2 bg-blue-600 text-white rounded-[20px] hover:bg-blue-700 disabled:bg-gray-300 w-[5rem]"
             >
               Save

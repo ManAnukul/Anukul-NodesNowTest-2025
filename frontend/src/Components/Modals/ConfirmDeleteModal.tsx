@@ -28,6 +28,7 @@ function ConfirmDeleteModal({
           </button>
           <button
             onClick={onConfirm}
+            data-cy="confirm-delete"
             className="px-4 py-2 bg-blue-600 text-white rounded-[20px] hover:bg-blue-700 w-[5rem]"
           >
             Delete

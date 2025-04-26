@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import TaskCard from "../TaskCard/TaskCard";
+import TaskCard from "../taskCard/TaskCard";
 import AddTaskModal from "../Modals/AddTaskModal";
 import EditTaskModal from "../Modals/EditTaskModal";
 import ConfirmDeleteModal from "../Modals/ConfirmDeleteModal";
 import TaskType from "../../Types/TaskType";
-import TaskDetailModal from "../TaskDetail/TaskDetailModal";
+import TaskDetailModal from "../taskDetail/TaskDetailModal";
 import axiosInstant from "../../lib/axios";
 
 function TaskList() {

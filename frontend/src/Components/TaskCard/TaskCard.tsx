@@ -41,7 +41,7 @@ function TaskCard({
               </tr>
             ) : (
               task.map((tasks) => (
-                <tr key={tasks.id} className="border-b">
+                <tr key={tasks.id} className="border-b" data-cy="task-item" data-task-id={tasks.id}>
                   <td className="px-4 py-2 font-medium">
                     <button
                       onClick={() => onView(tasks)}
@@ -69,6 +69,7 @@ function TaskCard({
                   <td className="px-4 py-2 flex justify-start gap-3">
                     <button
                       className="text-green-600 hover:text-green-800 transition"
+                      data-cy="status-change-button"
                       onClick={() => onStatusChange(tasks)}
                     >
                       <CheckCircle size={18} />
@@ -76,11 +77,14 @@ function TaskCard({
                     <button
                       className="text-blue-600 hover:text-blue-800 transition"
                       onClick={() => onEdit(tasks)}
+                      aria-label="edit-task-button"
+                      data-cy="edit-task-button"
                     >
                       <Pencil size={18} />
                     </button>
                     <button
                       className="text-red-600 hover:text-red-800 transition"
+                      data-cy="delete-task-button"
                       onClick={() => onDelete(tasks)}
                     >
                       <Trash2 size={18} />

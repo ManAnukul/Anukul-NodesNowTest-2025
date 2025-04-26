@@ -1,6 +1,6 @@
 import Navbar from "../../Components/Navbar/Navbar";
 
-import TaskList from "../../Components/TaskList/TaskList";
+import TaskList from "../../Components/taskList/TaskList";
 
 function TasksManagementPage() {
   return (

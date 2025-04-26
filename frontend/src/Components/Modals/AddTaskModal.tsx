@@ -3,14 +3,9 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import AddTaskModalProps from "../../Types/AddTaskModalProps";
 
-
 const validationSchema = Yup.object({
-  title: Yup.string()
-    .required("Title is required")
-    .min(3, "Title must be at least 3 characters"),
-  description: Yup.string()
-    .required("Description is required")
-    .min(5, "Description must be at least 5 characters"),
+  title: Yup.string().required("Title is required"),
+  description: Yup.string().optional(),
 });
 
 function AddTaskModal({ isOpen, onClose, onAdd }: AddTaskModalProps) {
@@ -23,6 +18,7 @@ function AddTaskModal({ isOpen, onClose, onAdd }: AddTaskModalProps) {
     onSubmit: (values) => {
       const newTask = { ...values, status: "pending" };
       onAdd(newTask);
+      formik.resetForm();
       onClose();
     },
   });
@@ -38,7 +34,11 @@ function AddTaskModal({ isOpen, onClose, onAdd }: AddTaskModalProps) {
       onClose={handleClose}
       className="fixed inset-0 z-50 flex items-center justify-center bg-opacity-30 backdrop-blur-sm"
     >
-      <div className="bg-white rounded-xl p-6 w-full max-w-md shadow-xl">
+      <div
+        className="bg-white rounded-xl p-6 w-full max-w-md shadow-xl"
+        aria-label="add-task-modal"
+        data-cy="add-task-modal"
+      >
         <Dialog.Title className="text-xl font-bold mb-4">
           Add New Task
         </Dialog.Title>
@@ -51,6 +51,7 @@ function AddTaskModal({ isOpen, onClose, onAdd }: AddTaskModalProps) {
               id="title"
               name="title"
               type="text"
+              data-cy="add-task-title"
               className="w-full border rounded p-2 mb-3"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -69,6 +70,7 @@ function AddTaskModal({ isOpen, onClose, onAdd }: AddTaskModalProps) {
               id="description"
               name="description"
               className="w-full border rounded p-2 mb-3"
+              data-cy="add-task-description"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.description}
@@ -82,12 +84,15 @@ function AddTaskModal({ isOpen, onClose, onAdd }: AddTaskModalProps) {
             <button
               type="button"
               onClick={handleClose}
+              aria-label="close-add-task-modal"
+              data-cy="close-add-task-modal"
               className="px-4 py-2 text-gray-700 rounded "
             >
               Cancel
             </button>
             <button
               type="submit"
+              data-cy="submit-add-task"
               className="px-4 py-2 bg-blue-600 text-white rounded-[20px] hover:bg-blue-700 w-[5rem]"
             >
               Add

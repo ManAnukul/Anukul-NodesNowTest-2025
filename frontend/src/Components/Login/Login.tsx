@@ -14,32 +14,15 @@ function Login() {
   const validationSchema = yup.object({
     email: yup
       .string()
+      .trim()
       .email("Invalid email format")
-      .required("Email is required"),
-    password: yup
-      .string()
-      .required("Password is required")
-      .min(8, "Password must be at least 8 characters")
-      .test(
-        "has-lowercase",
-        "Password must include at least one lowercase letter",
-        (value) => /[a-z]/.test(value || "")
-      )
-      .test(
-        "has-uppercase",
-        "Password must include at least one uppercase letter",
-        (value) => /[A-Z]/.test(value || "")
-      )
-      .test(
-        "has-number",
-        "Password must include at least one number",
-        (value) => /[0-9]/.test(value || "")
-      )
-      .test(
-        "has-symbol",
-        "Password must include at least one special character",
-        (value) => /[!@#$%^&*()_\-+={}[\]:;"'|,.<>/?\\]/.test(value || "")
-      ),
+      .required("Email is required")
+      .test("is-domain-valid", "Invalid email format", (value) => {
+        if (!value) return false;
+        const domain = value.split("@")[1];
+        return !!(domain && domain.includes("."));
+      }),
+    password: yup.string().required("Password is required"),
   });
 
   const formik = useFormik({
@@ -63,16 +46,18 @@ function Login() {
     setError("");
     setLoading(true);
     try {
-      const response = await axiosInstant.post("/auth/login", { email, password },{withCredentials:true});
+      const response = await axiosInstant.post(
+        "/auth/login",
+        { email, password },
+        { withCredentials: true }
+      );
       if (response.status === 200) {
         formik.resetForm();
         navigate("/");
-      } else {
-        setError("Invalid email or password.");
       }
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
-        setError(error.response?.data.english_description || "Login failed.");
+        setError(error.response?.data.message || "Login failed.");
       } else {
         setError("An unknown error occurred.");
       }
@@ -83,12 +68,13 @@ function Login() {
 
   return (
     <div className="min-h-screen w-full flex bg-gray-100">
-      <div className="w-full md:w-1/2 flex items-center justify-center   p-8">
+      <div className="w-full md:w-1/2 flex items-center justify-center p-8">
         <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-lg">
           {error && (
             <div
               className="bg-red-100 text-red-700 flex items-center p-4 rounded mb-4"
               role="alert"
+              aria-label="error_of_login"
             >
               <Lock size={18} className="mr-2" />
               {error}
@@ -147,6 +133,7 @@ function Login() {
             <button
               type="submit"
               disabled={loading}
+              aria-label="loading-spinner"
               className={`w-full py-2 px-4 flex justify-center items-center gap-2 font-semibold rounded-lg shadow-md transition ${
                 loading
                   ? "bg-blue-400 cursor-not-allowed"
@@ -171,7 +158,6 @@ function Login() {
           </form>
         </div>
       </div>
-
       <div
         className=" md:block w-1/2 bg-cover bg-center"
         style={{

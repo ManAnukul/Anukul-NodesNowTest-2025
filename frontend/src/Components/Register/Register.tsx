@@ -14,12 +14,26 @@ function Register() {
   const validationSchema = yup.object({
     email: yup
       .string()
+      .trim()
       .email("Invalid email format")
-      .required("Email is required"),
+      .required("Email is required")
+      .test("is-domain-valid", "Invalid email format", (value) => {
+        if (!value) return false;
+        const domain = value.split("@")[1];
+        return !!(domain && domain.includes("."));
+      }),
     password: yup
       .string()
       .required("Password is required")
       .min(8, "Password must be at least 8 characters")
+      .max(20, "Password cannot be longer than 20 characters")
+      .test(
+        "no-whitespace",
+        "Password cannot be empty or whitespace only",
+        (value) => {
+          return value?.trim().length > 0;
+        }
+      )
       .test(
         "has-lowercase",
         "Password must include at least one lowercase letter",
@@ -41,7 +55,6 @@ function Register() {
         (value) => /[!@#$%^&*()_\-+={}[\]:;"'|,.<>/?\\]/.test(value || "")
       ),
   });
-
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -93,6 +106,7 @@ function Register() {
             <div
               className="bg-red-100 text-red-700 text-center flex items-center justify-center p-4 rounded mb-4"
               role="alert"
+              aria-label="error_of_register"
             >
               <Lock size={18} className="mr-2" />
               {error}

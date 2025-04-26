@@ -18,6 +18,7 @@ function Navbar() {
         }
       } catch (error) {
         console.error("User fetch failed:", error);
+        navigate("/login");
       }
     };
 
