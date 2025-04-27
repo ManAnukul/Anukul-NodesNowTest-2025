@@ -1,5 +1,5 @@
 import { Dialog } from "@headlessui/react";
-import ConfirmDeleteModalProps from "../../Types/ConfirmDeleteModalProps";
+import ConfirmDeleteModalProps from "../../../Types/ConfirmDeleteModalProps";
 
 function ConfirmDeleteModal({
   isOpen,
@@ -22,12 +22,15 @@ function ConfirmDeleteModal({
         <div className="flex justify-end gap-2">
           <button
             onClick={onClose}
+            aria-label="cancel-delete"
+            data-cy="cancel-delete"
             className="px-4 py-2 rounded text-gray-700 hover:bg-gray-100"
           >
             Cancel
           </button>
           <button
             onClick={onConfirm}
+            aria-label="confirm-delete"
             data-cy="confirm-delete"
             className="px-4 py-2 bg-blue-600 text-white rounded-[20px] hover:bg-blue-700 w-[5rem]"
           >

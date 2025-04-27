@@ -23,7 +23,7 @@ function Navbar() {
     };
 
     fetchUser();
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -40,7 +40,12 @@ function Navbar() {
 
   const handleLogout = async () => {
     try {
-      await axiosInstant.post("/auth/logout", {}, { withCredentials: true });
+      const res = await axiosInstant.post(
+        "/auth/logout",
+        {},
+        { withCredentials: true }
+      );
+      console.log("Logout Response:", res);
       setUser("");
       navigate("/login");
     } catch (error) {
@@ -62,6 +67,8 @@ function Navbar() {
           <button
             onClick={() => setDropdownOpen(!dropdownOpen)}
             className="flex items-center gap-2 font-medium text-gray-700 hover:text-black transition"
+            data-cy="dropdown-logout-button"
+            aria-label="dropdown-logout-button"
           >
             <User size={23} />
             <span>{user}</span>
@@ -71,6 +78,8 @@ function Navbar() {
               <button
                 onClick={handleLogout}
                 className="w-full text-left flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition"
+                data-cy="logout-button"
+                aria-label="logout-button"
               >
                 <LogOut size={18} /> Logout
               </button>
@@ -81,6 +90,8 @@ function Navbar() {
         <button
           className="bg-black text-white px-6 py-2 rounded-[10px] shadow-md hover:bg-gray-900 transition font-medium flex items-center gap-2"
           onClick={() => navigate("/login")}
+          data-cy="login-button"
+          aria-label="login-button"
         >
           <User size={23} /> Login
         </button>

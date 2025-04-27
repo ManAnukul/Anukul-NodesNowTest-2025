@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AxiosError } from "axios";
+import axios from "axios";
 import { Loader2, Lock } from "lucide-react";
 import axiosInstant from "../../lib/axios";
 import { useFormik } from "formik";
@@ -56,8 +56,10 @@ function Login() {
         navigate("/");
       }
     } catch (error: unknown) {
-      if (error instanceof AxiosError) {
-        setError(error.response?.data.message || "Login failed.");
+      console.log(error);
+      if (axios.isAxiosError(error)) {
+        const errorMessage = error.response?.data.message || "Login failed.";
+        setError(errorMessage);
       } else {
         setError("An unknown error occurred.");
       }
@@ -92,7 +94,7 @@ function Login() {
                 placeholder="you@example.com"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                aria-label="email"
+                aria-label="login-email"
                 name="email"
                 value={formik.values.email}
                 className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -115,7 +117,7 @@ function Login() {
                 placeholder="••••••••"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                aria-label="password"
+                aria-label="login-password"
                 name="password"
                 value={formik.values.password}
                 className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -133,7 +135,7 @@ function Login() {
             <button
               type="submit"
               disabled={loading}
-              aria-label="loading-spinner"
+              aria-label="submit-login-loading-spinner"
               className={`w-full py-2 px-4 flex justify-center items-center gap-2 font-semibold rounded-lg shadow-md transition ${
                 loading
                   ? "bg-blue-400 cursor-not-allowed"

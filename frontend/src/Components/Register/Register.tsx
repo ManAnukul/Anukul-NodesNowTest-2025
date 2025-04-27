@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstant from "../../lib/axios";
 import { Loader2, Lock } from "lucide-react";
-import { AxiosError } from "axios";
+import axios from "axios";
 import { useFormik } from "formik";
 import * as yup from "yup";
 
@@ -87,9 +87,10 @@ function Register() {
         setError("Registration failed. Please try again.");
       }
     } catch (error: unknown) {
-      if (error instanceof AxiosError) {
-        console.log(error);
-        setError(error.response?.data.message || "Registration failed.");
+      if (axios.isAxiosError(error)) {
+        const errorMessage =
+          error.response?.data.message || "Registration failed.";
+        setError(errorMessage);
       } else {
         setError("An unknown error occurred.");
       }
@@ -125,6 +126,7 @@ function Register() {
                 type="email"
                 name="email"
                 id="email"
+                aria-label="register-email"
                 placeholder="you@example.com"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -148,6 +150,7 @@ function Register() {
                 type="password"
                 name="password"
                 id="password"
+                aria-label="register-password"
                 placeholder="••••••••"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -167,6 +170,8 @@ function Register() {
             <button
               type="submit"
               disabled={loading}
+              aria-label="submit-register-loading-spinner"
+              data-testid="submit-register-loading-spinner"
               className={`w-full py-2 px-4 flex justify-center items-center gap-2 font-semibold rounded-lg shadow-md transition ${
                 loading
                   ? "bg-blue-400 cursor-not-allowed"
@@ -184,6 +189,7 @@ function Register() {
                 type="button"
                 onClick={() => navigate("/login")}
                 className="text-sm text-blue-600 hover:underline"
+                aria-label="have-account-on-register"
               >
                 Already have an account? Login
               </button>

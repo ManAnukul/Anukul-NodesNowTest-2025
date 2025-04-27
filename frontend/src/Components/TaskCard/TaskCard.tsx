@@ -1,6 +1,10 @@
 import { CheckCircle, Pencil, Plus, Trash2 } from "lucide-react";
 import TaskCardProps from "../../Types/TaskCardProps";
 
+interface TaskCardPropsExtended extends TaskCardProps {
+  errorMessage?: string;
+}
+
 function TaskCard({
   task,
   onEdit,
@@ -8,7 +12,8 @@ function TaskCard({
   onAdd,
   onView,
   onStatusChange,
-}: TaskCardProps) {
+  errorMessage,
+}: TaskCardPropsExtended) {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-[80%] h-[80vh] border border-gray-200 mb-6">
@@ -17,13 +22,18 @@ function TaskCard({
           <button
             type="button"
             className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition"
+            data-testid="add-button"
             onClick={onAdd}
           >
             <Plus size={18} />
             Add Task
           </button>
         </div>
-        <table className="min-w-full table-auto text-gray-700">
+        <table
+          className="min-w-full table-auto text-gray-700"
+          aria-label="task-list"
+          data-cy="task-list"
+        >
           <thead className="bg-gray-100">
             <tr>
               <th className="px-4 py-2 text-left">Title</th>
@@ -33,15 +43,31 @@ function TaskCard({
             </tr>
           </thead>
           <tbody>
-            {task.length === 0 ? (
+            {errorMessage ? (
               <tr>
-                <td colSpan={4} className="text-center py-10 text-gray-500">
+                <td
+                  colSpan={4}
+                  className="text-center py-10 text-red-600 font-semibold"
+                  data-testid="error-task"
+                >
+                  {errorMessage}
+                </td>
+              </tr>
+            ) : task.length === 0 ? (
+              <tr>
+                <td colSpan={4} className="text-center py-10 text-gray-500" data-testid="no-task">
                   Don't have any Task
                 </td>
               </tr>
             ) : (
               task.map((tasks) => (
-                <tr key={tasks.id} className="border-b" data-cy="task-item" data-task-id={tasks.id}>
+                <tr
+                  key={tasks.id}
+                  className="border-b"
+                  aria-label="task-item"
+                  data-cy="task-item"
+                  data-task-id={tasks.id}
+                >
                   <td className="px-4 py-2 font-medium">
                     <button
                       onClick={() => onView(tasks)}
@@ -69,6 +95,8 @@ function TaskCard({
                   <td className="px-4 py-2 flex justify-start gap-3">
                     <button
                       className="text-green-600 hover:text-green-800 transition"
+                      aria-label="status-change-button"
+                      data-testid="status-change-button"
                       data-cy="status-change-button"
                       onClick={() => onStatusChange(tasks)}
                     >
@@ -78,6 +106,7 @@ function TaskCard({
                       className="text-blue-600 hover:text-blue-800 transition"
                       onClick={() => onEdit(tasks)}
                       aria-label="edit-task-button"
+                      data-testid="edit-task-button"
                       data-cy="edit-task-button"
                     >
                       <Pencil size={18} />
@@ -85,6 +114,7 @@ function TaskCard({
                     <button
                       className="text-red-600 hover:text-red-800 transition"
                       data-cy="delete-task-button"
+                      data-testid="delete-task-button"
                       onClick={() => onDelete(tasks)}
                     >
                       <Trash2 size={18} />

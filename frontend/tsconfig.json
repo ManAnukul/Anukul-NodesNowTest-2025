@@ -4,9 +4,9 @@
     "moduleResolution": "node",
     "target": "ESNext",
     "esModuleInterop": true,
-    "types": ["cypress"]
+    "types": ["cypress", "vitest"]
   },
-  "include": ["cypress/**/*.ts"],
+  "include": ["src/**/*.ts", "src/**/*.tsx", "cypress/**/*.ts"],
   "files": [],
   "references": [
     { "path": "./tsconfig.app.json" },

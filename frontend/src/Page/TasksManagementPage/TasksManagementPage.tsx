@@ -6,7 +6,7 @@ function TasksManagementPage() {
   return (
     <>
       <Navbar />
-      <TaskList/>
+      <TaskList />
     </>
   );
 }

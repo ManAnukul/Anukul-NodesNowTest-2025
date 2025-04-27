@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import TaskCard from "../taskCard/TaskCard";
-import AddTaskModal from "../Modals/AddTaskModal";
-import EditTaskModal from "../Modals/EditTaskModal";
-import ConfirmDeleteModal from "../Modals/ConfirmDeleteModal";
+import AddTaskModal from "../Modals/AddTaskModal/AddTaskModal";
+import EditTaskModal from "../Modals/EditTaskModal/EditTaskModal";
+import ConfirmDeleteModal from "../Modals/ConfirmDeleteModal/ConfirmDeleteModal";
 import TaskType from "../../Types/TaskType";
 import TaskDetailModal from "../taskDetail/TaskDetailModal";
 import axiosInstant from "../../lib/axios";
@@ -16,14 +16,17 @@ function TaskList() {
   const [taskToDelete, setTaskToDelete] = useState<TaskType | null>(null);
   const [taskToView, setTaskToView] = useState<TaskType | null>(null);
   const [tasks, setTasks] = useState<TaskType[]>([]);
+  const [fetchError, setFetchError] = useState(false);
 
   useEffect(() => {
     const fetchTasks = async () => {
       try {
         const response = await axiosInstant.get("/tasks");
         setTasks(response.data.data);
+        setFetchError(false);
       } catch (error) {
         console.error("Failed to fetch tasks:", error);
+        setFetchError(true);
       }
     };
 
@@ -44,7 +47,6 @@ function TaskList() {
     }
   };
 
-  // Edit Task (PATCH)
   const handleEdit = async (id: string, updatedTask: TaskType) => {
     try {
       const res = await axiosInstant.patch(`/tasks/${id}`, updatedTask);
@@ -57,7 +59,6 @@ function TaskList() {
     }
   };
 
-  // Delete Task (DELETE)
   const handleDelete = async (id: string) => {
     try {
       await axiosInstant.delete(`/tasks/${id}`);
@@ -67,22 +68,18 @@ function TaskList() {
     }
   };
 
-  // Update Task Status Handler with API call
   const handleStatusChange = (task: TaskType) => {
     let newStatus: string | null = null;
 
-    // กำหนดสถานะใหม่ตามสถานะปัจจุบัน
     if (task.status === "pending") {
       newStatus = "in_progress";
     } else if (task.status === "in_progress") {
       newStatus = "completed";
     } else {
-      // หากสถานะเป็น "completed" หรือไม่สามารถเปลี่ยนแปลงสถานะได้
       console.log("Status change not allowed for completed tasks");
-      return; // ไม่ทำการเปลี่ยนแปลง
+      return;
     }
 
-    // ส่งคำขอ API เพื่ออัพเดตสถานะ
     if (newStatus) {
       axiosInstant
         .patch(`/tasks/${task.id}`, { status: newStatus })
@@ -99,7 +96,6 @@ function TaskList() {
     }
   };
 
-  // Modal Open Handlers
   const openEditModal = (task: TaskType) => {
     setTaskToEdit(task);
     setIsEditModalOpen(true);
@@ -123,10 +119,12 @@ function TaskList() {
         onEdit={openEditModal}
         onDelete={openDeleteModal}
         onView={openDetailModal}
-        onStatusChange={handleStatusChange} // ส่งฟังก์ชันการเปลี่ยนสถานะ
+        onStatusChange={handleStatusChange}
+        errorMessage={
+          fetchError ? "Failed to load tasks. Please try again." : undefined
+        }
       />
 
-      {/* Add Task Modal */}
       <AddTaskModal
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
@@ -139,7 +137,6 @@ function TaskList() {
         task={taskToView}
       />
 
-      {/* Edit Task Modal */}
       {taskToEdit && (
         <EditTaskModal
           isOpen={isEditModalOpen}
@@ -149,7 +146,6 @@ function TaskList() {
         />
       )}
 
-      {/* Confirm Delete Modal */}
       {taskToDelete && (
         <ConfirmDeleteModal
           isOpen={isDeleteModalOpen}

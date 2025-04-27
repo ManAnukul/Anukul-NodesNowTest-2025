@@ -1,18 +1,16 @@
 import { Dialog } from "@headlessui/react";
 
-import TaskType from "../../Types/TaskType";
-import EditTaskModalProps from "../../Types/EditTaskModalProps";
+import TaskType from "../../../Types/TaskType";
+import EditTaskModalProps from "../../../Types/EditTaskModalProps";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
-// Validation schema using Yup
 const validationSchema = Yup.object({
   title: Yup.string().required("Title is required"),
   description: Yup.string().optional(),
 });
 
 function EditTaskModal({ isOpen, onClose, task, onEdit }: EditTaskModalProps) {
-  // useFormik hook
   const formik = useFormik({
     initialValues: task || { title: "", description: "" },
     validationSchema,
@@ -23,19 +21,22 @@ function EditTaskModal({ isOpen, onClose, task, onEdit }: EditTaskModalProps) {
     },
   });
 
-  // Handle closing the modal and resetting the form
   const handleClose = () => {
-    formik.resetForm(); // Clear the form
-    onClose(); // Close the modal
+    formik.resetForm();
+    onClose();
   };
 
   return (
     <Dialog
       open={isOpen}
-      onClose={handleClose} // Use handleClose to reset form and close the modal
+      onClose={handleClose}
       className="fixed inset-0 z-50 flex items-center justify-center bg-opacity-30 backdrop-blur-sm"
     >
-      <div className="bg-white rounded-xl p-6 w-full max-w-md shadow-xl" data-cy="edit-task-modal">
+      <div
+        className="bg-white rounded-xl p-6 w-full max-w-md shadow-xl"
+        data-cy="edit-task-modal"
+        data-testid="edit-task-modal"
+      >
         <Dialog.Title className="text-xl font-bold mb-4">
           Edit Task
         </Dialog.Title>
@@ -49,6 +50,7 @@ function EditTaskModal({ isOpen, onClose, task, onEdit }: EditTaskModalProps) {
               type="text"
               id="title"
               name="title"
+              aria-label="edit-task-title-input"
               data-cy="edit-task-title-input"
               className="w-full border rounded p-2"
               placeholder="Task title"
@@ -100,7 +102,7 @@ function EditTaskModal({ isOpen, onClose, task, onEdit }: EditTaskModalProps) {
           <div className="flex justify-end gap-2">
             <button
               type="button"
-              onClick={handleClose} // Use handleClose on cancel
+              onClick={handleClose}
               className="px-4 py-2 text-gray-700 rounded"
             >
               Cancel

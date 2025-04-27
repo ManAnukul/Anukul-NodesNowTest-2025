@@ -61,7 +61,12 @@ export class AuthController {
   @Post('/logout')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Logout and clear access token' })
-  logout(@Res({ passthrough: true }) res: Response): void {
-    res.clearCookie('access_token'); // Clear the cookie that stores the JWT
+  logout(@Res({ passthrough: true }) res: Response) {
+    res.clearCookie('access_token');
+
+    return res.json({
+      message: 'Logout successful',
+      statusCode: HttpStatus.OK,
+    });
   }
 }

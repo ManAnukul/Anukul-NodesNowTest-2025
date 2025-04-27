@@ -1,7 +1,7 @@
 import { Dialog } from "@headlessui/react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import AddTaskModalProps from "../../Types/AddTaskModalProps";
+import AddTaskModalProps from "../../../Types/AddTaskModalProps";
 
 const validationSchema = Yup.object({
   title: Yup.string().required("Title is required"),
@@ -92,6 +92,7 @@ function AddTaskModal({ isOpen, onClose, onAdd }: AddTaskModalProps) {
             </button>
             <button
               type="submit"
+              aria-label="submit-add-task"
               data-cy="submit-add-task"
               className="px-4 py-2 bg-blue-600 text-white rounded-[20px] hover:bg-blue-700 w-[5rem]"
             >
