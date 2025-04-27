@@ -95,8 +95,8 @@ Task OF Me เป็น Web Application สำหรับจัดการง�
    ```env
    DATABASE_HOST=db
    DATABASE_PORT=3306
-   DATABASE_NAME=mydb
-   DATABASE_USERNAME=root
+   DATABASE_NAME=taskofme
+   DATABASE_USERNAME=your_username
    DATABASE_PASSWORD=your_password
    JWT_SECRET=your_jwt_secret_key
    ```
