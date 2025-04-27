@@ -16,12 +16,10 @@ describe("Register - Email and Password Validation (Formik + Yup)", () => {
 
       cy.visit("/register");
 
-      // Input valid email and password
       cy.get('input[name="email"]').type(validEmail);
       cy.get('input[name="password"]').type(validPassword);
       cy.get('button[type="submit"]').click();
 
-      // Wait for the API call to finish
       cy.wait("@CreateUser").then((intercept: Interception) => {
         expect(intercept.response.statusCode).to.eq(201);
         expect(intercept.response.body.message).to.eq(
@@ -29,11 +27,9 @@ describe("Register - Email and Password Validation (Formik + Yup)", () => {
         );
       });
 
-      // Ensure that no validation errors are present
       cy.get('[aria-label="error-email"]').should("not.exist");
       cy.get('[aria-label="error-password"]').should("not.exist");
 
-      // Ensure that the user is redirected to the login page after successful registration
       cy.url().should("include", "/login");
     });
 
@@ -130,7 +126,7 @@ describe("Register - Email and Password Validation (Formik + Yup)", () => {
 
     it("should register successfully with valid password (20 characters)", () => {
       const randomEmail = `test${Date.now()}@mail.com`;
-      const validPassword20 = "Aa1_" + "aA1_" + "aA1_" + "aA1_";
+      const validPassword20 = "Aa1_" + "aA1_" + "aA1_" + "aA1_"+ "aA1_";
 
       cy.intercept("POST", "/users", {
         statusCode: 201,

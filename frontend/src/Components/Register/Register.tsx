@@ -119,7 +119,6 @@ function Register() {
               Register
             </h2>
 
-            {/* Email */}
             <div>
               <label htmlFor="email">Email</label>
               <input
@@ -143,7 +142,6 @@ function Register() {
               )}
             </div>
 
-            {/* Password */}
             <div>
               <label htmlFor="password">Password</label>
               <input
