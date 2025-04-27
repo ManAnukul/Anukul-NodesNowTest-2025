@@ -17,7 +17,7 @@ describe("Tasks Management Page", () => {
 
     context("Real Login and Logout", () => {
       it("should login, save JWT in cookie, logout, and verify backend response", () => {
-        const randomEmail = "testuser@gmail.com";
+        const randomEmail = "test@gmail.com";
         const validPassword = "Aa123456789_";
 
         cy.request({

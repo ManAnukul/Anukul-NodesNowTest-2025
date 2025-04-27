@@ -64,7 +64,7 @@ describe("Register - Email and Password Validation (Formik + Yup)", () => {
     it("should trim whitespace around the email if any", () => {
       cy.visit("/register");
 
-      cy.get('input[name="email"]').type("  tast@example.com  ");
+      cy.get('input[name="email"]').type("  test@gmail.com  ");
       cy.get('input[name="password"]').type("Aa123456789_");
       cy.get('button[type="submit"]').click();
 
