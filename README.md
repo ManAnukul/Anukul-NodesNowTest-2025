@@ -93,9 +93,9 @@ Task OF Me เป็น Web Application สำหรับจัดการง�
    **สำหรับ Backend** (สร้างไฟล์ `.env` ในโฟลเดอร์ `backend`)
 
    ```env
-   DATABASE_HOST=localhost
+   DATABASE_HOST=db
    DATABASE_PORT=3306
-   DATABASE_NAME=task_management
+   DATABASE_NAME=mydb
    DATABASE_USERNAME=root
    DATABASE_PASSWORD=your_password
    JWT_SECRET=your_jwt_secret_key
